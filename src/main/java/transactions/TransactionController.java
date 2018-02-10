@@ -23,8 +23,6 @@ public class TransactionController {
         int userId = counter.incrementAndGet();
         User newUser = new User(userId);
         users.put(userId, newUser);
-        postTransaction(userId, 100);
-        postTransaction(userId, 250);
         System.out.println(userId);
         //TODO fix redirecting
         return new RedirectView(userId + "/transactions");
@@ -37,11 +35,11 @@ public class TransactionController {
 
     @PostMapping("/{userId}/transactions")
     @ResponseStatus(HttpStatus.CREATED)
-    public Transaction postTransaction(@PathVariable Integer userId, @RequestBody float amount) {
+    public Transaction postTransaction(@PathVariable Integer userId, @RequestBody Transaction transaction) {
         int id = counter.incrementAndGet();
-        Transaction newTransaction = new Transaction(id, amount);
-        users.get(userId).getTransactions().put(id,newTransaction);
-        return newTransaction;
+        transaction.setId(id);
+        users.get(userId).getTransactions().put(id,transaction);
+        return transaction;
     }
 
     @GetMapping("/{userId}/transactions")

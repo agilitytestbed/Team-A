@@ -2,27 +2,60 @@ package transactions;
 
 import categories.Category;
 
-public class Transaction {
-    private int id;
-    private Category category;
-    private float amount;
+import java.util.Date;
 
-    public Transaction(int id, float amount) {
-        this.id = id;
-        this.amount = amount;
-        this.category = null;
-    }
+public class Transaction {
+    private int transactionId;
+
+    private Date transactionDate;
+
+    private String payee;
+
+    private String paymentReference;
+
+    private double amount;
+
+    private Category category;
 
     public int getId() {
-        return id;
+        return transactionId;
+    }
+
+    public void setId(int transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public Date getTranactionDate() {
+        return transactionDate;
+    }
+
+    public void setTranactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+    public String getPayee() {
+        return payee;
+    }
+
+    public void setPayee(String payee) {
+        this.payee = payee;
+    }
+    public String getPaymentReference() {
+        return paymentReference;
+    }
+
+    public void setPaymentReference(String paymentReference) {
+        this.paymentReference = paymentReference;
+    }
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public Category getCategory() {
         return category;
-    }
-
-    public float getAmount() {
-        return amount;
     }
 
     public void setCategory(Category category) {
