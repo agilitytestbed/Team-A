@@ -18,14 +18,14 @@ public class TransactionController {
             new LinkedHashMap<Integer, User>();
 
     @RequestMapping("/")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.TEMPORARY_REDIRECT)
     public RedirectView newUser(){
         int userId = counter.incrementAndGet();
         User newUser = new User(userId);
         users.put(userId, newUser);
-        System.out.println(userId);
         //TODO fix redirecting
-        return new RedirectView(userId + "/transactions");
+        //return newUser;
+        return new RedirectView("/api/v0/" + userId + "/transactions");
     }
 
     @RequestMapping("/debug")
