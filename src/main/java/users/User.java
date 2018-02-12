@@ -5,15 +5,24 @@ import transactions.Transaction;
 import java.util.LinkedHashMap;
 
 public class User {
-    private final int userId;
+    private int userId;
+    private String name;
     private LinkedHashMap<Integer, Transaction> transactions = new LinkedHashMap<Integer, Transaction>();
 
-    public User(int userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
     public int getUserId() {
         return userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public LinkedHashMap<Integer, Transaction> getTransactions() {
