@@ -18,8 +18,8 @@ public class GreetingController {
                             String.format(template, name));
     }
 
-    @RequestMapping("/")
+    /*@RequestMapping("/")
     public RedirectView redirectTest() {
         return new RedirectView("/greeting");
-    }
+    }*/
 }
