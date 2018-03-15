@@ -2,7 +2,7 @@ package categories;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import users.UserController;
+import sessions.SessionController;
 
 import java.util.Map;
 
@@ -10,30 +10,30 @@ import java.util.Map;
 @RequestMapping("/api/v0")
 public class CategoryController {
 
-    @PostMapping("/{userId}/categories")
+    @PostMapping("/{sessionId}/categories")
     @ResponseStatus(HttpStatus.CREATED)
-    public Category postCategory(@PathVariable Integer userId, @RequestBody Category category) {
-        int id = UserController.counter.incrementAndGet();
+    public Category postCategory(@PathVariable Integer sessionId, @RequestBody Category category) {
+        int id = SessionController.counter.incrementAndGet();
         category.setId(id);
-        UserController.users.get(userId).getCategories().put(id, category);
+        SessionController.sessions.get(sessionId).getCategories().put(id, category);
         return category;
     }
 
-    @GetMapping("/{userId}/categories")
-    public Map getCategories(@PathVariable Integer userId) {
-        return UserController.users.get(userId).getCategories();
+    @GetMapping("/{sessionId}/categories")
+    public Map getCategories(@PathVariable Integer sessionId) {
+        return SessionController.sessions.get(sessionId).getCategories();
     }
 
-    @GetMapping("/{userId}/categories/{categoryId}")
-    public Category getCategory(@PathVariable Integer userId, @PathVariable Integer categoryId) {
-        return UserController.users.get(userId).getCategories().get(categoryId);
+    @GetMapping("/{sessionId}/categories/{categoryId}")
+    public Category getCategory(@PathVariable Integer sessionId, @PathVariable Integer categoryId) {
+        return SessionController.sessions.get(sessionId).getCategories().get(categoryId);
     }
 
-    @PutMapping("/{userId}/categories/{categoryId}")
-    public Category updateCategory(@PathVariable Integer userId, @PathVariable Integer categoryId,
+    @PutMapping("/{sessionId}/categories/{categoryId}")
+    public Category updateCategory(@PathVariable Integer sessionId, @PathVariable Integer categoryId,
                                    @RequestBody Category category) {
         category.setId(categoryId);
-        UserController.users.get(userId).getCategories().put(categoryId, category);
+        SessionController.sessions.get(sessionId).getCategories().put(categoryId, category);
         return category;
     }
 }
