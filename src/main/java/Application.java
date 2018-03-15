@@ -3,7 +3,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"hello", "transactions"})
+@ComponentScan(basePackages = {"hello", "transactions", "users", "categories"})
 public class Application {
 
     public static void main(String[] args) {

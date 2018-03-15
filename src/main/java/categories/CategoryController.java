@@ -1,43 +1,39 @@
 package categories;
 
-import java.util.List;
-import Data.CategoryData;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import users.UserController;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.Map;
 
 @RestController
+@RequestMapping("/api/v0")
 public class CategoryController {
 
-    @Autowired
-    private CategoryService categoryService;
-
-    @RequestMapping(value="/categories", method=RequestMethod.POST)
-    public Category createCategory(@RequestBody CategoryData categoryData) {
-        return categoryService.createCategory(categoryData.getName());
-    }
-    @RequestMapping("/categories")
-    public List<Category> getCategories() {
-        return categoryService.getCategories();
+    @PostMapping("/{userId}/categories")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Category postCategory(@PathVariable Integer userId, @RequestBody Category category) {
+        int id = UserController.counter.incrementAndGet();
+        category.setId(id);
+        UserController.users.get(userId).getCategories().put(id, category);
+        return category;
     }
 
-    // The path variable id is not used
-    @RequestMapping(value="/categories/{categoryId}", method=RequestMethod.PUT)
-    public Category updateCategory(@RequestBody CategoryData categoryData) {
-        return categoryService.updateCategory(categoryData.getId(), categoryData.getName());
+    @GetMapping("/{userId}/categories")
+    public Map getCategories(@PathVariable Integer userId) {
+        return UserController.users.get(userId).getCategories();
     }
 
-    @RequestMapping("/categories/{categoryId}")
-    public Category getCategory(@PathVariable int categoryId) {
-        return categoryService.getCategory(categoryId);
+    @GetMapping("/{userId}/categories/{categoryId}")
+    public Category getCategory(@PathVariable Integer userId, @PathVariable Integer categoryId) {
+        return UserController.users.get(userId).getCategories().get(categoryId);
     }
 
-    @RequestMapping(value="/categories/{categoryId}", method=RequestMethod.DELETE)
-    public void deleteCategory(@PathVariable int categoryId) {
-        categoryService.deleteCategory(categoryId);
+    @PutMapping("/{userId}/categories/{categoryId}")
+    public Category updateCategory(@PathVariable Integer userId, @PathVariable Integer categoryId,
+                                   @RequestBody Category category) {
+        category.setId(categoryId);
+        UserController.users.get(userId).getCategories().put(categoryId, category);
+        return category;
     }
 }
