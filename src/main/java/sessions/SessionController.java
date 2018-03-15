@@ -1,4 +1,4 @@
-package users;
+package sessions;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,21 +8,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/api/v0")
-public class UserController {
+public class SessionController {
     public static final AtomicInteger counter = new AtomicInteger();
-    public static LinkedHashMap<Integer, User> users =
+    public static LinkedHashMap<Integer, Session> sessions =
             new LinkedHashMap<>();
 
     @RequestMapping("/sessions")
     public int newSession() {
-        int userId = counter.incrementAndGet();
-        User newUser = new User(userId);
-        users.put(userId, newUser);
-        return userId;
+        int sessionId = counter.incrementAndGet();
+        Session newSession = new Session(sessionId);
+        sessions.put(sessionId, newSession);
+        return sessionId;
     }
 
     @RequestMapping("/debug")
     public Object debugInfo(){
-        return users;
+        return sessions;
     }
 }

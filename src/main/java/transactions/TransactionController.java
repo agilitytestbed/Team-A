@@ -4,7 +4,7 @@ import categories.Category;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import users.UserController;
+import sessions.SessionController;
 
 import java.util.*;
 import java.util.function.Function;
@@ -14,19 +14,19 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v0")
 public class TransactionController {
 
-    @PostMapping("/{userId}/transactions")
+    @PostMapping("/{sessionId}/transactions")
     @ResponseStatus(HttpStatus.CREATED)
-    public Transaction postTransaction(@PathVariable Integer userId, @RequestBody Transaction transaction) {
-        int id = UserController.counter.incrementAndGet();
+    public Transaction postTransaction(@PathVariable Integer sessionId, @RequestBody Transaction transaction) {
+        int id = SessionController.counter.incrementAndGet();
         transaction.setId(id);
-        UserController.users.get(userId).getTransactions().put(id,transaction);
+        SessionController.sessions.get(sessionId).getTransactions().put(id,transaction);
         return transaction;
     }
 
-    @GetMapping("/{userId}/transactions")
-    public Map getTransactions(@PathVariable Integer userId, @RequestParam(defaultValue = "0") Integer offset,
+    @GetMapping("/{sessionId}/transactions")
+    public Map getTransactions(@PathVariable Integer sessionId, @RequestParam(defaultValue = "0") Integer offset,
                                 @RequestParam(defaultValue = "20") Integer limit) {
-        LinkedHashMap<Integer, Transaction> transactionMap = UserController.users.get(userId).getTransactions();
+        LinkedHashMap<Integer, Transaction> transactionMap = SessionController.sessions.get(sessionId).getTransactions();
         SortedSet<Integer> transactionList = new TreeSet<Integer>(transactionMap.keySet());
         SortedSet<Integer> keys = transactionList.subSet(Math.min(offset+2, transactionList.size()-1),
                 Math.min(offset+limit+2, transactionList.size()+2));
@@ -34,10 +34,10 @@ public class TransactionController {
         return keys.stream().collect(Collectors.toMap(Function.identity(), transactionMap::get));
     }
 
-    @GetMapping(value = "/{userId}/transactions", params = "category")
-    public Map getTransactionsCategory(@PathVariable Integer userId, @RequestParam Integer category) {
+    @GetMapping(value = "/{sessionId}/transactions", params = "category")
+    public Map getTransactionsCategory(@PathVariable Integer sessionId, @RequestParam Integer category) {
         LinkedHashMap<Integer, Transaction> resultMap = new LinkedHashMap<>();
-        LinkedHashMap<Integer, Transaction> transactionMap = UserController.users.get(userId).getTransactions();
+        LinkedHashMap<Integer, Transaction> transactionMap = SessionController.sessions.get(sessionId).getTransactions();
         for (Transaction transaction : transactionMap.values()) {
             if(transaction.getCategory().getId()==category) {
                 resultMap.put(transaction.getId(), transaction);
@@ -46,33 +46,33 @@ public class TransactionController {
         return resultMap;
     }
 
-    @GetMapping("/{userId}/transactions/{transactionId}")
-    public Transaction getTransaction(@PathVariable Integer userId, @PathVariable Integer transactionId) {
-        return UserController.users.get(userId).getTransactions().get(transactionId);
+    @GetMapping("/{sessionId}/transactions/{transactionId}")
+    public Transaction getTransaction(@PathVariable Integer sessionId, @PathVariable Integer transactionId) {
+        return SessionController.sessions.get(sessionId).getTransactions().get(transactionId);
     }
 
-    @DeleteMapping("/{userId}/transactions/{transactionId}")
-    public void deleteTransaction(@PathVariable Integer userId, @PathVariable Integer transactionId) {
-        UserController.users.get(userId).getTransactions().remove(transactionId);
+    @DeleteMapping("/{sessionId}/transactions/{transactionId}")
+    public void deleteTransaction(@PathVariable Integer sessionId, @PathVariable Integer transactionId) {
+        SessionController.sessions.get(sessionId).getTransactions().remove(transactionId);
     }
 
-    @PatchMapping("/{userId}/transactions/{transactionId}")
-    public ResponseEntity<Transaction> assignCategory(@PathVariable Integer userId, @PathVariable Integer transactionId,
+    @PatchMapping("/{sessionId}/transactions/{transactionId}")
+    public ResponseEntity<Transaction> assignCategory(@PathVariable Integer sessionId, @PathVariable Integer transactionId,
                                       @RequestBody Integer categoryId) {
-        Transaction transaction = UserController.users.get(userId).getTransactions().get(transactionId);
-        if (UserController.users.get(userId).getCategories().containsKey(categoryId)) {
-            Category category = UserController.users.get(userId).getCategories().get(categoryId);
+        Transaction transaction = SessionController.sessions.get(sessionId).getTransactions().get(transactionId);
+        if (SessionController.sessions.get(sessionId).getCategories().containsKey(categoryId)) {
+            Category category = SessionController.sessions.get(sessionId).getCategories().get(categoryId);
             transaction.setCategory(category);
             return new ResponseEntity<>(transaction, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/{userId}/transactions/{transactionId}")
-    public Transaction updateTransaction(@PathVariable Integer userId, @PathVariable Integer transactionId,
+    @PutMapping("/{sessionId}/transactions/{transactionId}")
+    public Transaction updateTransaction(@PathVariable Integer sessionId, @PathVariable Integer transactionId,
                                          @RequestBody Transaction transaction) {
         transaction.setId(transactionId);
-        UserController.users.get(userId).getTransactions().put(transactionId, transaction);
+        SessionController.sessions.get(sessionId).getTransactions().put(transactionId, transaction);
         return transaction;
     }
 }

@@ -1,21 +1,21 @@
-package users;
+package sessions;
 
 import categories.Category;
 import transactions.Transaction;
 
 import java.util.LinkedHashMap;
 
-public class User {
-    private final int userId;
+public class Session {
+    private final int sessionId;
     private LinkedHashMap<Integer, Transaction> transactions = new LinkedHashMap<>();
     private LinkedHashMap<Integer, Category> categories = new LinkedHashMap<>();
 
-    public User(int userId) {
-        this.userId = userId;
+    public Session(int sessionId) {
+        this.sessionId = sessionId;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getSessionId() {
+        return sessionId;
     }
 
     public LinkedHashMap<Integer, Transaction> getTransactions() {

@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserTest {
+public class SessionTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -26,7 +26,7 @@ public class UserTest {
     public void creatingNewUser() throws Exception {
 
         this.mockMvc.perform(get("/api/v0/")).andDo(print()).andExpect(status().isTemporaryRedirect())
-                .andExpect(jsonPath("$.users").isNotEmpty());
+                .andExpect(jsonPath("$.sessions").isNotEmpty());
 
     }
 }
