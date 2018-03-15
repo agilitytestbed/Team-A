@@ -9,6 +9,10 @@ public class User {
     private String name;
     private LinkedHashMap<Integer, Transaction> transactions = new LinkedHashMap<Integer, Transaction>();
 
+    public User(int userId){
+        this.userId=userId;
+    }
+
     public void setUserId(int userId) {
         this.userId = userId;
     }
