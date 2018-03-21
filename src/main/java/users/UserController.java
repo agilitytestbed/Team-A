@@ -19,7 +19,7 @@ public class UserController {
 
     @RequestMapping(value="/users", method=RequestMethod.POST)
     public User createUser(@RequestBody UserData userData) {
-        return userService.createUser(userData.getName());
+        return userService.createUser(userData.getName(),userData.getId());
     }
 
     // The path variable id is not used

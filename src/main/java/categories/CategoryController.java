@@ -20,6 +20,10 @@ public class CategoryController {
     public Category createCategory(@RequestBody CategoryData categoryData) {
         return categoryService.createCategory(categoryData.getName());
     }
+    @RequestMapping("/categories")
+    public List<Category> getCategories() {
+        return categoryService.getCategories();
+    }
 
     // The path variable id is not used
     @RequestMapping(value="/categories/{categoryId}", method=RequestMethod.PUT)
@@ -30,11 +34,6 @@ public class CategoryController {
     @RequestMapping("/categories/{categoryId}")
     public Category getCategory(@PathVariable int categoryId) {
         return categoryService.getCategory(categoryId);
-    }
-
-    @RequestMapping("/categories")
-    public List<Category> getCategories() {
-        return categoryService.getCategories();
     }
 
     @RequestMapping(value="/categories/{categoryId}", method=RequestMethod.DELETE)

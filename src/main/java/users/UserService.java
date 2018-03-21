@@ -1,7 +1,7 @@
 package users;
 
 import java.util.List;
-
+import users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +11,9 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public User createUser(String name) {
+    public User createUser(String name , int userId) {
 
-        User user = new User();
+        User user = new User(userId);
         user.setName(name);
 
         userMapper.createUser(user);
@@ -23,7 +23,7 @@ public class UserService {
 
     public User updateUser(int userId, String name) {
 
-        User user = new User();
+        User user = new User(userId);
         user.setUserId(userId);
         user.setName(name);
 
