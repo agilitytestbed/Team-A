@@ -78,7 +78,7 @@ public class TransactionController {
         users.get(userId).getTransactions().remove(transactionId);
     }
 
-    @PatchMapping("/{userId}/transactions/{transactionId}")
+    @PatchMapping("/{userId}/transactions/{transactionId}/")
     public Transaction assignCategory(@PathVariable Integer userId, @PathVariable Integer transactionId,
                                       @RequestBody Category category) {
         Transaction transaction = users.get(userId).getTransactions().get(transactionId);

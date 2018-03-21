@@ -4,19 +4,16 @@ import java.util.Date;
 import categories.Category;
 import users.User;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TransactionService {
 
-    @Autowired
     private TransactionMapper transactionMapper;
 
     public Transaction createTransaction(Date transactionDate, String payee, String paymentReference, float amount, int userId, int categoryId) {
 
-        User user = new User();
+        User user = new User(userId);
         user.setUserId(userId);
         Category category = new Category();
         category.setId(categoryId);
@@ -36,7 +33,7 @@ public class TransactionService {
 
     public Transaction updateTransaction(int id, Date transactionDate, String payee, String paymentReference, float amount, int userId, int categoryId) {
 
-        User user = new User();
+        User user = new User(userId);
         user.setUserId(userId);
         Category category = new Category();
         category.setId(categoryId);
@@ -63,9 +60,7 @@ public class TransactionService {
         return transactionMapper.getTransactions(userId);
     }
 
-    public List<TransactionSummaryForCategory> getTransactionsByCategory(Date startDate, Date endDate) {
-        return transactionMapper.getTransactionsByCategory(startDate, endDate);
-    }
+
 
     public void deleteTransaction(int transactionId) {
         transactionMapper.deleteTransaction(transactionId);
