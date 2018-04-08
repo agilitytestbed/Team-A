@@ -3,7 +3,9 @@ package sessions;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
@@ -14,11 +16,13 @@ public class SessionController {
             new LinkedHashMap<>();
 
     @RequestMapping("/sessions")
-    public int newSession() {
+    public Map newSession() {
         int sessionId = counter.incrementAndGet();
         Session newSession = new Session(sessionId);
         sessions.put(sessionId, newSession);
-        return sessionId;
+        Map response = new HashMap();
+        response.put("sessionID",sessionId);
+        return response;
     }
 
     @RequestMapping("/debug")
