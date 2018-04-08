@@ -4,6 +4,7 @@ import categories.Category;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sessions.Session;
 import sessions.SessionController;
 
 import java.util.*;
@@ -55,10 +56,9 @@ public class TransactionController {
     public void deleteTransaction(@PathVariable Integer sessionId, @PathVariable Integer transactionId) {
         SessionController.sessions.get(sessionId).getTransactions().remove(transactionId);
     }
-
-    @PatchMapping("/{sessionId}/transactions/{transactionId}")
+    @PatchMapping(value = "/{sessionId}/transactions/{transactionId}", params = "categoryId")
     public ResponseEntity<Transaction> assignCategory(@PathVariable Integer sessionId, @PathVariable Integer transactionId,
-                                      @RequestBody Integer categoryId) {
+                                                      @RequestParam Integer categoryId) {
         Transaction transaction = SessionController.sessions.get(sessionId).getTransactions().get(transactionId);
         if (SessionController.sessions.get(sessionId).getCategories().containsKey(categoryId)) {
             Category category = SessionController.sessions.get(sessionId).getCategories().get(categoryId);
