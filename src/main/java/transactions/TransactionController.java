@@ -40,8 +40,10 @@ public class TransactionController {
         LinkedHashMap<Integer, Transaction> resultMap = new LinkedHashMap<>();
         LinkedHashMap<Integer, Transaction> transactionMap = SessionController.sessions.get(sessionId).getTransactions();
         for (Transaction transaction : transactionMap.values()) {
-            if(transaction.getCategory().getId()==category) {
-                resultMap.put(transaction.getId(), transaction);
+            if (transaction.getCategory()!=null) {
+                if (transaction.getCategory().getId() == category) {
+                    resultMap.put(transaction.getId(), transaction);
+                }
             }
         }
         return resultMap;
