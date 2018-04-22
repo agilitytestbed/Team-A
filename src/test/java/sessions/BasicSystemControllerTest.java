@@ -3,7 +3,7 @@ package sessions;
 import categories.Category;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.jboss.arquillian.junit.InSequence;
+
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -178,8 +178,9 @@ public class BasicSystemControllerTest {
                 config(RestAssured.config().jsonConfig(jsonConfig().numberReturnType(DOUBLE))).
                 contentType("application/json").
         when().
-                get("/{sessionId}/categories",1).
+                get(API_URL + "/{sessionId}/categories",1).
         then().
                 body("6.name", equalTo("testCategory"), "7.name", equalTo("anotherCategory"));
     }
+
 }

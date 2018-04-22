@@ -1,23 +1,22 @@
 package transactions;
 
 import categories.Category;
-import users.User;
 import java.util.Date;
 
 public class Transaction {
     private int transactionId;
 
-    private Date transactionDate;
+    private String transactionDate;
 
-    private String payee;
+    private String externalIBAN;
 
-    private String paymentReference;
+    private double amount;
 
-    private float amount;
-
-    private User user;
+    private TransactionType type;
 
     private Category category;
+
+
 
     public int getId() {
 
@@ -29,51 +28,44 @@ public class Transaction {
         this.transactionId = transactionId;
     }
 
-    public Date getTranactionDate() {
+    public String getTranactionDate() {
 
         return transactionDate;
     }
 
-    public void setTranactionDate(Date transactionDate) {
+    public void setTranactionDate(String transactionDate) {
 
         this.transactionDate = transactionDate;
     }
 
-    public String getPayee() {
 
-        return payee;
+    private String getExternalIBAN(){
+        return externalIBAN;
     }
 
-    public void setPayee(String payee) {
+    public void setExternalIBAN(String externalIBAN) {
 
-        this.payee = payee;
-    }
-    public String getPaymentReference() {
-
-        return paymentReference;
+        this.externalIBAN = externalIBAN;
     }
 
-    public void setPaymentReference(String paymentReference) {
-
-        this.paymentReference = paymentReference;
+    private TransactionType getType(){
+        return type;
     }
+
+    public void setType(TransactionType type) {
+        this.type = type;
+    }
+
     public double getAmount() {
 
         return amount;
     }
 
-    public void setAmount(float amount) {
+
+
+    public void setAmount(double amount) {
 
         this.amount = amount;
-    }
-
-    public User getUser() {
-
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Category getCategory() {

@@ -1,47 +1,39 @@
 package categories;
 
 
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Map;
+import sessions.*;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CategoryService {
 
-    @Autowired
-    private CategoryMapper categoryMapper;
 
-    public Category createCategory(String name) {
+    public Category postCategory(Integer sessionId, Category category) {
 
-        Category category = new Category();
-        category.setName(name);
-
-        categoryMapper.createCategory(category);
-
+        Integer id = SessionController.counter.incrementAndGet();
+        category.setId(id);
+        SessionController.sessions.get(sessionId).getCategories().put(id, category);
         return category;
     }
 
-    public Category updateCategory(int categoryId, String name) {
+    public Category updateCategory(Integer sessionId ,Integer categoryId, Category category) {
 
-        Category category = new Category();
         category.setId(categoryId);
-        category.setName(name);
-
-        categoryMapper.updateCategory(category);
-
+        SessionController.sessions.get(sessionId).getCategories().put(categoryId, category);
         return category;
     }
 
-    public Category getCategory(int categoryId) {
-        return categoryMapper.getCategory(categoryId);
+    public Category getCategory(Integer sessionId ,Integer categoryId) {
+        return SessionController.sessions.get(sessionId).getCategories().get(categoryId);
     }
 
-    public List<Category> getCategories() {
-        return categoryMapper.getCategories();
+    public Map getCategories(Integer sessionId) {
+        return SessionController.sessions.get(sessionId).getCategories();
     }
 
-    public void deleteCategory(int categoryId) {
-        categoryMapper.deleteCategory(categoryId);
+    public void deleteCategory( Integer sessionId, Integer categoryId) {
+        SessionController.sessions.get(sessionId).getCategories().remove(categoryId);
     }
 }
