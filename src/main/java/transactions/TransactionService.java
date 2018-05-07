@@ -15,6 +15,7 @@ public class TransactionService {
     public Transaction postTransaction(Integer sessionId, Transaction transaction) {
 
         int id = SessionController.counter.incrementAndGet();
+        transaction.setId(id);
         SessionController.sessions.get(sessionId).getTransactions().put(id,transaction);
 
 
@@ -23,6 +24,7 @@ public class TransactionService {
     
     public Transaction updateTransaction(Integer sessionId, Transaction transaction ,Integer transactionId){
 
+        transaction.setId(transactionId);
         SessionController.sessions.get(sessionId).getTransactions().put(transactionId, transaction);
         return transaction;    }
 

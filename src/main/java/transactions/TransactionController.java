@@ -32,18 +32,6 @@ public class TransactionController {
     return transactionService.getTransactions(sessionId,offset,limit);
     }
 
-    @GetMapping(value = "/{sessionId}/transactions", params = "category")
-    public Map getTransactionsCategory(@PathVariable Integer sessionId, @RequestParam Integer categoryId) {
-        LinkedHashMap<Integer, Transaction> resultMap = new LinkedHashMap<>();
-        LinkedHashMap<Integer, Transaction> transactionMap = SessionController.sessions.get(sessionId).getTransactions();
-        for (Transaction transaction : transactionMap.values()) {
-            if(transaction.getCategory().getId()== categoryId) {
-                resultMap.put(transaction.getId(), transaction);
-            }
-        }
-        return resultMap;
-    }
-
     @GetMapping("/{sessionId}/transactions/{transactionId}")
     public Transaction getTransaction(@PathVariable Integer sessionId, @PathVariable Integer transactionId) {
             return transactionService.getTransaction(sessionId, transactionId);
@@ -53,11 +41,13 @@ public class TransactionController {
     public void deleteTransaction(@PathVariable Integer sessionId, @PathVariable Integer transactionId) {
         transactionService.deleteTransaction(sessionId, transactionId);
     }
-    @PatchMapping(value = "/{sessionId}/transactions/{transactionId}", params = "category")
+    @PatchMapping(value = "/{sessionId}/transactions/{transactionId}")
     public ResponseEntity<Transaction> assignCategory(@PathVariable Integer sessionId, @PathVariable Integer transactionId,
-                                                      @RequestParam Category category) {
+                                                      @RequestBody Category category) {
         Transaction transaction = SessionController.sessions.get(sessionId).getTransactions().get(transactionId);
-        if (SessionController.sessions.get(sessionId).getCategories().containsKey(category)) {
+        System.out.println("[Category] " + category.getId());
+        System.out.println("[Session] " + sessionId);
+        if (SessionController.sessions.get(sessionId).getCategories().containsKey(category.getId())) {
             transaction.setCategory(category);
             return new ResponseEntity<>(transaction, HttpStatus.OK);
         }

@@ -16,8 +16,6 @@ public class Transaction {
 
     private Category category;
 
-
-
     public int getId() {
 
         return transactionId;
