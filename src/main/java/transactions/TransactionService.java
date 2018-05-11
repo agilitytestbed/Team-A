@@ -18,7 +18,6 @@ public class TransactionService {
         transaction.setId(id);
         SessionController.sessions.get(sessionId).getTransactions().put(id,transaction);
 
-
         return transaction;
     }
     

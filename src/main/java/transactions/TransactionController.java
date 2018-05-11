@@ -33,8 +33,12 @@ public class TransactionController {
     }
 
     @GetMapping("/{sessionId}/transactions/{transactionId}")
-    public Transaction getTransaction(@PathVariable Integer sessionId, @PathVariable Integer transactionId) {
-            return transactionService.getTransaction(sessionId, transactionId);
+    public ResponseEntity<Transaction> getTransaction(@PathVariable Integer sessionId, @PathVariable Integer transactionId) {
+        Transaction transaction = transactionService.getTransaction(sessionId, transactionId);
+        if (transaction == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<> (transaction, HttpStatus.OK);
     }
 
     @DeleteMapping("/{sessionId}/transactions/{transactionId}")

@@ -2,6 +2,7 @@ package categories;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sessions.SessionController;
 import categories.*;
@@ -26,8 +27,12 @@ public class CategoryController {
     }
 
     @GetMapping("/{sessionId}/categories/{categoryId}")
-    public Category getCategory(@PathVariable Integer sessionId, @PathVariable Integer categoryId) {
-        return categoryService.getCategory(sessionId,categoryId);
+    public ResponseEntity<Category> getCategory(@PathVariable Integer sessionId, @PathVariable Integer categoryId) {
+        Category category = categoryService.getCategory(sessionId,categoryId);
+        if (category == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<> (category, HttpStatus.OK);
     }
 
     @PutMapping("/{sessionId}/categories/{categoryId}")
