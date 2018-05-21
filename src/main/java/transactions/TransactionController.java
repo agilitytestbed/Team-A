@@ -12,7 +12,7 @@ import sessions.Session;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/v0")
+@RequestMapping("/api/v1")
 public class TransactionController {
 
     @Autowired

@@ -9,7 +9,7 @@ import categories.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v0")
+@RequestMapping("/api/v1")
 public class CategoryController {
 
     @Autowired
