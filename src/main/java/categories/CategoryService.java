@@ -11,7 +11,7 @@ import transactions.Transaction;
 public class CategoryService {
 
 
-    public Category postCategory(Integer sessionId, Category category) {
+    public Category postCategory(String sessionId, Category category) {
 
         Integer id = SessionController.counter.incrementAndGet();
         category.setId(id);
@@ -19,7 +19,7 @@ public class CategoryService {
         return category;
     }
 
-    public Category updateCategory(Integer sessionId ,Integer categoryId, Category category) {
+    public Category updateCategory(String sessionId ,Integer categoryId, Category category) {
 
         try {
             category.setId(categoryId);
@@ -37,15 +37,15 @@ public class CategoryService {
         return category;
     }
 
-    public Category getCategory(Integer sessionId ,Integer categoryId) {
+    public Category getCategory(String sessionId ,Integer categoryId) {
         return SessionController.sessions.get(sessionId).getCategories().get(categoryId);
     }
 
-    public Map getCategories(Integer sessionId) {
+    public Map getCategories(String sessionId) {
         return SessionController.sessions.get(sessionId).getCategories();
     }
 
-    public void deleteCategory( Integer sessionId, Integer categoryId) {
+    public void deleteCategory( String sessionId, Integer categoryId) {
         SessionController.sessions.get(sessionId).getCategories().remove(categoryId);
         for (Transaction transaction : SessionController.sessions.get(sessionId).getTransactions().values()) {
             if (transaction.getCategory() != null) {

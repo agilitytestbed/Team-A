@@ -14,12 +14,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequestMapping("/api/v1")
 public class SessionController {
     public static final AtomicInteger counter = new AtomicInteger();
-    public static LinkedHashMap<Integer, Session> sessions =
+    public static LinkedHashMap<String, Session> sessions =
             new LinkedHashMap<>();
 
     @RequestMapping("/sessions")
     public ResponseEntity<Map> newSession() {
-        int sessionId = counter.incrementAndGet();
+        String sessionId = "" + counter.incrementAndGet();
         Session newSession = new Session(sessionId);
         sessions.put(sessionId, newSession);
         Map response = new HashMap();

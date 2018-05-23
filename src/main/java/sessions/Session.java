@@ -6,15 +6,15 @@ import transactions.Transaction;
 import java.util.LinkedHashMap;
 
 public class Session {
-    private final int sessionId;
+    private final String sessionId;
     private LinkedHashMap<Integer, Transaction> transactions = new LinkedHashMap<>();
     private LinkedHashMap<Integer, Category> categories = new LinkedHashMap<>();
 
-    public Session(int sessionId) {
+    public Session(String sessionId) {
         this.sessionId = sessionId;
     }
 
-    public int getSessionId() {
+    public String getSessionId() {
         return sessionId;
     }
 

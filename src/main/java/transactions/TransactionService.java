@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class TransactionService {
 
 
-    public Transaction postTransaction(Integer sessionId, Transaction transaction) {
+    public Transaction postTransaction(String sessionId, Transaction transaction) {
 
         int id = SessionController.counter.incrementAndGet();
         transaction.setId(id);
@@ -21,17 +21,17 @@ public class TransactionService {
         return transaction;
     }
     
-    public Transaction updateTransaction(Integer sessionId, Transaction transaction ,Integer transactionId){
+    public Transaction updateTransaction(String sessionId, Transaction transaction ,Integer transactionId){
 
         transaction.setId(transactionId);
         SessionController.sessions.get(sessionId).getTransactions().put(transactionId, transaction);
         return transaction;    }
 
-    public Transaction getTransaction(Integer sessionId, Integer transactionId) {
+    public Transaction getTransaction(String sessionId, Integer transactionId) {
         return SessionController.sessions.get(sessionId).getTransactions().get(transactionId);
     }
 
-    public Map getTransactions(Integer sessionId ,Integer offset, Integer limit){
+    public Map getTransactions(String sessionId ,Integer offset, Integer limit){
         LinkedHashMap<Integer, Transaction> transactionMap = SessionController.sessions.get(sessionId).getTransactions();
         SortedSet<Integer> transactionList = new TreeSet<Integer>(transactionMap.keySet());
         SortedSet<Integer> keys = transactionList.subSet(Math.min(offset+2, transactionList.size()-1),
@@ -40,7 +40,7 @@ public class TransactionService {
         return keys.stream().collect(Collectors.toMap(Function.identity(), transactionMap::get));
     }
 
-    public void deleteTransaction(Integer sessionId ,Integer transactionId) {
+    public void deleteTransaction(String sessionId ,Integer transactionId) {
         SessionController.sessions.get(sessionId).getTransactions().remove(transactionId);
     }
 }

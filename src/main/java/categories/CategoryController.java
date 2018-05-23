@@ -17,17 +17,17 @@ public class CategoryController {
 
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
-    public Category postCategory(@RequestParam Integer sessionId, @RequestBody Category category) {
+    public Category postCategory(@RequestParam String sessionId, @RequestBody Category category) {
         return categoryService.postCategory(sessionId, category);
     }
 
     @GetMapping("/categories")
-    public Map getCategories(@RequestParam Integer sessionId) {
+    public Map getCategories(@RequestParam String sessionId) {
         return categoryService.getCategories(sessionId);
     }
 
     @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<Category> getCategory(@RequestParam Integer sessionId, @PathVariable Integer categoryId) {
+    public ResponseEntity<Category> getCategory(@RequestParam String sessionId, @PathVariable Integer categoryId) {
         Category category = categoryService.getCategory(sessionId,categoryId);
         if (category == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -36,14 +36,14 @@ public class CategoryController {
     }
 
     @PutMapping("/categories/{categoryId}")
-    public Category updateCategory(@RequestParam Integer sessionId, @PathVariable Integer categoryId,
+    public Category updateCategory(@RequestParam String sessionId, @PathVariable Integer categoryId,
                                    @RequestBody Category category) {
 
         return categoryService.updateCategory(sessionId,categoryId,category);
     }
 
     @DeleteMapping("/categories/{categoryId}")
-    public void deleteCategory(@RequestParam Integer sessionId, @PathVariable Integer categoryId) {
+    public void deleteCategory(@RequestParam String sessionId, @PathVariable Integer categoryId) {
         categoryService.deleteCategory(sessionId,categoryId);
     }
 }

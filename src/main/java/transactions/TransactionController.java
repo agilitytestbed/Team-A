@@ -20,20 +20,20 @@ public class TransactionController {
 
     @PostMapping("/transactions")
     @ResponseStatus(HttpStatus.CREATED)
-    public Transaction postTransaction(@RequestParam Integer sessionId, @RequestBody Transaction transaction) {
+    public Transaction postTransaction(@RequestParam String sessionId, @RequestBody Transaction transaction) {
                return transactionService.postTransaction(
                        sessionId,transaction
                        );
     }
 
     @GetMapping("/transactions")
-    public Map getTransactions(@RequestParam Integer sessionId, @RequestParam(defaultValue = "0") Integer offset,
+    public Map getTransactions(@RequestParam String sessionId, @RequestParam(defaultValue = "0") Integer offset,
                                 @RequestParam(defaultValue = "20") Integer limit) {
     return transactionService.getTransactions(sessionId,offset,limit);
     }
 
     @GetMapping("/transactions/{transactionId}")
-    public ResponseEntity<Transaction> getTransaction(@RequestParam Integer sessionId, @PathVariable Integer transactionId) {
+    public ResponseEntity<Transaction> getTransaction(@RequestParam String sessionId, @PathVariable Integer transactionId) {
         Transaction transaction = transactionService.getTransaction(sessionId, transactionId);
         if (transaction == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -42,11 +42,11 @@ public class TransactionController {
     }
 
     @DeleteMapping("/transactions/{transactionId}")
-    public void deleteTransaction(@RequestParam Integer sessionId, @PathVariable Integer transactionId) {
+    public void deleteTransaction(@RequestParam String sessionId, @PathVariable Integer transactionId) {
         transactionService.deleteTransaction(sessionId, transactionId);
     }
     @PatchMapping(value = "/transactions/{transactionId}")
-    public ResponseEntity<Transaction> assignCategory(@RequestParam Integer sessionId, @PathVariable Integer transactionId,
+    public ResponseEntity<Transaction> assignCategory(@RequestParam String sessionId, @PathVariable Integer transactionId,
                                                       @RequestBody Category category) {
         Transaction transaction = SessionController.sessions.get(sessionId).getTransactions().get(transactionId);
         System.out.println("[Category] " + category.getId());
@@ -59,7 +59,7 @@ public class TransactionController {
     }
 
     @PutMapping("/transactions/{transactionId}")
-    public Transaction updateTransaction(@RequestParam Integer sessionId, @PathVariable Integer transactionId,
+    public Transaction updateTransaction(@RequestParam String sessionId, @PathVariable Integer transactionId,
                                          @RequestBody Transaction transaction) {
        return transactionService.updateTransaction(
                sessionId,
