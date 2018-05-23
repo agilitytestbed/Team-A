@@ -18,22 +18,22 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @PostMapping("/{sessionId}/transactions")
+    @PostMapping("/transactions")
     @ResponseStatus(HttpStatus.CREATED)
-    public Transaction postTransaction(@PathVariable Integer sessionId, @RequestBody Transaction transaction) {
+    public Transaction postTransaction(@RequestParam Integer sessionId, @RequestBody Transaction transaction) {
                return transactionService.postTransaction(
                        sessionId,transaction
                        );
     }
 
-    @GetMapping("/{sessionId}/transactions")
-    public Map getTransactions(@PathVariable Integer sessionId, @RequestParam(defaultValue = "0") Integer offset,
+    @GetMapping("/transactions")
+    public Map getTransactions(@RequestParam Integer sessionId, @RequestParam(defaultValue = "0") Integer offset,
                                 @RequestParam(defaultValue = "20") Integer limit) {
     return transactionService.getTransactions(sessionId,offset,limit);
     }
 
-    @GetMapping("/{sessionId}/transactions/{transactionId}")
-    public ResponseEntity<Transaction> getTransaction(@PathVariable Integer sessionId, @PathVariable Integer transactionId) {
+    @GetMapping("/transactions/{transactionId}")
+    public ResponseEntity<Transaction> getTransaction(@RequestParam Integer sessionId, @PathVariable Integer transactionId) {
         Transaction transaction = transactionService.getTransaction(sessionId, transactionId);
         if (transaction == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -41,12 +41,12 @@ public class TransactionController {
         return new ResponseEntity<> (transaction, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{sessionId}/transactions/{transactionId}")
-    public void deleteTransaction(@PathVariable Integer sessionId, @PathVariable Integer transactionId) {
+    @DeleteMapping("/transactions/{transactionId}")
+    public void deleteTransaction(@RequestParam Integer sessionId, @PathVariable Integer transactionId) {
         transactionService.deleteTransaction(sessionId, transactionId);
     }
-    @PatchMapping(value = "/{sessionId}/transactions/{transactionId}")
-    public ResponseEntity<Transaction> assignCategory(@PathVariable Integer sessionId, @PathVariable Integer transactionId,
+    @PatchMapping(value = "/transactions/{transactionId}")
+    public ResponseEntity<Transaction> assignCategory(@RequestParam Integer sessionId, @PathVariable Integer transactionId,
                                                       @RequestBody Category category) {
         Transaction transaction = SessionController.sessions.get(sessionId).getTransactions().get(transactionId);
         System.out.println("[Category] " + category.getId());
@@ -58,8 +58,8 @@ public class TransactionController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/{sessionId}/transactions/{transactionId}")
-    public Transaction updateTransaction(@PathVariable Integer sessionId, @PathVariable Integer transactionId,
+    @PutMapping("/transactions/{transactionId}")
+    public Transaction updateTransaction(@RequestParam Integer sessionId, @PathVariable Integer transactionId,
                                          @RequestBody Transaction transaction) {
        return transactionService.updateTransaction(
                sessionId,
