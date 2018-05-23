@@ -19,21 +19,44 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @PostMapping("/transactions")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Transaction postTransaction(@RequestParam String sessionId, @RequestBody Transaction transaction) {
-               return transactionService.postTransaction(
-                       sessionId,transaction
-                       );
+    public ResponseEntity<Transaction> postTransaction(@RequestParam(defaultValue = "") String sessionId,
+                                                       @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+                                                       @RequestBody Transaction transaction) {
+        if (sessionId.equals("")) {
+            if (sessionHeader.equals("")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            sessionId = sessionHeader;
+        }
+        transaction = transactionService.postTransaction(sessionId,transaction);
+        return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
 
     @GetMapping("/transactions")
-    public Map getTransactions(@RequestParam String sessionId, @RequestParam(defaultValue = "0") Integer offset,
-                                @RequestParam(defaultValue = "20") Integer limit) {
-    return transactionService.getTransactions(sessionId,offset,limit);
+    public ResponseEntity<Map> getTransactions(@RequestParam(defaultValue = "") String sessionId,
+                               @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+                               @RequestParam(defaultValue = "0") Integer offset,
+                               @RequestParam(defaultValue = "20") Integer limit) {
+        if (sessionId.equals("")) {
+            if (sessionHeader.equals("")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            sessionId = sessionHeader;
+        }
+        Map response = transactionService.getTransactions(sessionId,offset,limit);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/transactions/{transactionId}")
-    public ResponseEntity<Transaction> getTransaction(@RequestParam String sessionId, @PathVariable Integer transactionId) {
+    public ResponseEntity<Transaction> getTransaction(@RequestParam(defaultValue = "") String sessionId,
+                                                      @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+                                                      @PathVariable Integer transactionId) {
+        if (sessionId.equals("")) {
+            if (sessionHeader.equals("")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            sessionId = sessionHeader;
+        }
         Transaction transaction = transactionService.getTransaction(sessionId, transactionId);
         if (transaction == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -42,12 +65,29 @@ public class TransactionController {
     }
 
     @DeleteMapping("/transactions/{transactionId}")
-    public void deleteTransaction(@RequestParam String sessionId, @PathVariable Integer transactionId) {
+    public ResponseEntity<Transaction> deleteTransaction(@RequestParam(defaultValue = "") String sessionId,
+                                  @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+                                  @PathVariable Integer transactionId) {
+        if (sessionId.equals("")) {
+            if (sessionHeader.equals("")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            sessionId = sessionHeader;
+        }
         transactionService.deleteTransaction(sessionId, transactionId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @PatchMapping(value = "/transactions/{transactionId}")
-    public ResponseEntity<Transaction> assignCategory(@RequestParam String sessionId, @PathVariable Integer transactionId,
+    public ResponseEntity<Transaction> assignCategory(@RequestParam(defaultValue = "") String sessionId,
+                                                      @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+                                                      @PathVariable Integer transactionId,
                                                       @RequestBody Category category) {
+        if (sessionId.equals("")) {
+            if (sessionHeader.equals("")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            sessionId = sessionHeader;
+        }
         Transaction transaction = SessionController.sessions.get(sessionId).getTransactions().get(transactionId);
         System.out.println("[Category] " + category.getId());
         System.out.println("[Session] " + sessionId);
@@ -59,12 +99,21 @@ public class TransactionController {
     }
 
     @PutMapping("/transactions/{transactionId}")
-    public Transaction updateTransaction(@RequestParam String sessionId, @PathVariable Integer transactionId,
+    public ResponseEntity<Transaction> updateTransaction(@RequestParam(defaultValue = "") String sessionId,
+                                         @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+                                         @PathVariable Integer transactionId,
                                          @RequestBody Transaction transaction) {
-       return transactionService.updateTransaction(
+        if (sessionId.equals("")) {
+            if (sessionHeader.equals("")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            sessionId = sessionHeader;
+        }
+        transaction = transactionService.updateTransaction(
                sessionId,
                transaction,
                transactionId
        );
+        return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 }

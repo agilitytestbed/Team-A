@@ -16,18 +16,42 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/categories")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Category postCategory(@RequestParam String sessionId, @RequestBody Category category) {
-        return categoryService.postCategory(sessionId, category);
+    public ResponseEntity<Category> postCategory(@RequestParam(defaultValue = "") String sessionId,
+                                 @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+                                 @RequestBody Category category) {
+        if (sessionId.equals("")) {
+            if (sessionHeader.equals("")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            sessionId = sessionHeader;
+        }
+        category = categoryService.postCategory(sessionId, category);
+        return new ResponseEntity<Category>(category, HttpStatus.CREATED);
     }
 
     @GetMapping("/categories")
-    public Map getCategories(@RequestParam String sessionId) {
-        return categoryService.getCategories(sessionId);
+    public ResponseEntity<Map> getCategories(@RequestParam(defaultValue = "") String sessionId,
+                             @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader) {
+        if (sessionId.equals("")) {
+            if (sessionHeader.equals("")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            sessionId = sessionHeader;
+        }
+        Map response =  categoryService.getCategories(sessionId);
+        return new ResponseEntity<Map>(response, HttpStatus.OK);
     }
 
     @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<Category> getCategory(@RequestParam String sessionId, @PathVariable Integer categoryId) {
+    public ResponseEntity<Category> getCategory(@RequestParam(defaultValue = "") String sessionId,
+                                                @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+                                                @PathVariable Integer categoryId) {
+        if (sessionId.equals("")) {
+            if (sessionHeader.equals("")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            sessionId = sessionHeader;
+        }
         Category category = categoryService.getCategory(sessionId,categoryId);
         if (category == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -36,14 +60,31 @@ public class CategoryController {
     }
 
     @PutMapping("/categories/{categoryId}")
-    public Category updateCategory(@RequestParam String sessionId, @PathVariable Integer categoryId,
+    public ResponseEntity<Category> updateCategory(@RequestParam(defaultValue = "") String sessionId,
+                                   @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+                                   @PathVariable Integer categoryId,
                                    @RequestBody Category category) {
-
-        return categoryService.updateCategory(sessionId,categoryId,category);
+        if (sessionId.equals("")) {
+            if (sessionHeader.equals("")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            sessionId = sessionHeader;
+        }
+        category = categoryService.updateCategory(sessionId,categoryId,category);
+        return new ResponseEntity<Category>(category, HttpStatus.OK);
     }
 
     @DeleteMapping("/categories/{categoryId}")
-    public void deleteCategory(@RequestParam String sessionId, @PathVariable Integer categoryId) {
+    public ResponseEntity<Category> deleteCategory(@RequestParam(defaultValue = "") String sessionId,
+                               @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+                               @PathVariable Integer categoryId) {
+        if (sessionId.equals("")) {
+            if (sessionHeader.equals("")) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            sessionId = sessionHeader;
+        }
         categoryService.deleteCategory(sessionId,categoryId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
