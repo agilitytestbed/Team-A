@@ -16,43 +16,43 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/categories")
-    public ResponseEntity<Category> postCategory(@RequestParam(defaultValue = "") String sessionId,
-                                 @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+    public ResponseEntity<Category> postCategory(@RequestParam(value = "session_id",required =false) String session_id,
+                                 @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                  @RequestBody Category category) {
-        if (sessionId.equals("")) {
-            if (sessionHeader.equals("")) {
+        if (session_id.equals("")) {
+            if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            sessionId = sessionHeader;
+            session_id = X_session_ID;
         }
-        category = categoryService.postCategory(sessionId, category);
+        category = categoryService.postCategory(session_id, category);
         return new ResponseEntity<Category>(category, HttpStatus.CREATED);
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<Map> getCategories(@RequestParam(defaultValue = "") String sessionId,
-                             @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader) {
-        if (sessionId.equals("")) {
-            if (sessionHeader.equals("")) {
+    public ResponseEntity<Map> getCategories(@RequestParam(value = "session_id",required =false) String session_id,
+                             @RequestHeader(value = "X-session-ID",required =false) String X_session_ID) {
+        if (session_id.equals("")) {
+            if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            sessionId = sessionHeader;
+            session_id = X_session_ID;
         }
-        Map response =  categoryService.getCategories(sessionId);
+        Map response =  categoryService.getCategories(session_id);
         return new ResponseEntity<Map>(response, HttpStatus.OK);
     }
 
     @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<Category> getCategory(@RequestParam(defaultValue = "") String sessionId,
-                                                @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+    public ResponseEntity<Category> getCategory(@RequestParam(value = "session_id",required =false) String session_id,
+                                                @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                                 @PathVariable Integer categoryId) {
-        if (sessionId.equals("")) {
-            if (sessionHeader.equals("")) {
+        if (session_id.equals("")) {
+            if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            sessionId = sessionHeader;
+            session_id = X_session_ID;
         }
-        Category category = categoryService.getCategory(sessionId,categoryId);
+        Category category = categoryService.getCategory(session_id,categoryId);
         if (category == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -60,31 +60,31 @@ public class CategoryController {
     }
 
     @PutMapping("/categories/{categoryId}")
-    public ResponseEntity<Category> updateCategory(@RequestParam(defaultValue = "") String sessionId,
-                                   @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+    public ResponseEntity<Category> updateCategory(@RequestParam(value = "session_id",required =false) String session_id,
+                                   @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                    @PathVariable Integer categoryId,
                                    @RequestBody Category category) {
-        if (sessionId.equals("")) {
-            if (sessionHeader.equals("")) {
+        if (session_id.equals("")) {
+            if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            sessionId = sessionHeader;
+            session_id = X_session_ID;
         }
-        category = categoryService.updateCategory(sessionId,categoryId,category);
+        category = categoryService.updateCategory(session_id,categoryId,category);
         return new ResponseEntity<Category>(category, HttpStatus.OK);
     }
 
     @DeleteMapping("/categories/{categoryId}")
-    public ResponseEntity<Category> deleteCategory(@RequestParam(defaultValue = "") String sessionId,
-                               @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+    public ResponseEntity<Category> deleteCategory(@RequestParam(value = "session_id",required =false) String session_id,
+                               @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                @PathVariable Integer categoryId) {
-        if (sessionId.equals("")) {
-            if (sessionHeader.equals("")) {
+        if (session_id.equals("")) {
+            if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            sessionId = sessionHeader;
+            session_id = X_session_ID;
         }
-        categoryService.deleteCategory(sessionId,categoryId);
+        categoryService.deleteCategory(session_id,categoryId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -19,45 +19,45 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @PostMapping("/transactions")
-    public ResponseEntity<Transaction> postTransaction(@RequestParam(defaultValue = "") String sessionId,
-                                                       @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+    public ResponseEntity<Transaction> postTransaction(@RequestParam(value = "session_id",required =false) String session_id,
+                                                       @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                                        @RequestBody Transaction transaction) {
-        if (sessionId.equals("")) {
-            if (sessionHeader.equals("")) {
+        if (session_id.equals("")) {
+            if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            sessionId = sessionHeader;
+            session_id = X_session_ID;
         }
-        transaction = transactionService.postTransaction(sessionId,transaction);
+        transaction = transactionService.postTransaction(session_id,transaction);
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
 
     @GetMapping("/transactions")
-    public ResponseEntity<Map> getTransactions(@RequestParam(defaultValue = "") String sessionId,
-                               @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+    public ResponseEntity<Map> getTransactions(@RequestParam(value = "session_id",required =false) String session_id,
+                               @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                @RequestParam(defaultValue = "0") Integer offset,
                                @RequestParam(defaultValue = "20") Integer limit) {
-        if (sessionId.equals("")) {
-            if (sessionHeader.equals("")) {
+        if (session_id.equals("")) {
+            if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            sessionId = sessionHeader;
+            session_id = X_session_ID;
         }
-        Map response = transactionService.getTransactions(sessionId,offset,limit);
+        Map response = transactionService.getTransactions(session_id,offset,limit);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/transactions/{transactionId}")
-    public ResponseEntity<Transaction> getTransaction(@RequestParam(defaultValue = "") String sessionId,
-                                                      @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+    public ResponseEntity<Transaction> getTransaction(@RequestParam(value = "session_id",required =false) String session_id,
+                                                      @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                                       @PathVariable Integer transactionId) {
-        if (sessionId.equals("")) {
-            if (sessionHeader.equals("")) {
+        if (session_id.equals("")) {
+            if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            sessionId = sessionHeader;
+            session_id = X_session_ID;
         }
-        Transaction transaction = transactionService.getTransaction(sessionId, transactionId);
+        Transaction transaction = transactionService.getTransaction(session_id, transactionId);
         if (transaction == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -65,33 +65,35 @@ public class TransactionController {
     }
 
     @DeleteMapping("/transactions/{transactionId}")
-    public ResponseEntity<Transaction> deleteTransaction(@RequestParam(defaultValue = "") String sessionId,
-                                  @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+    public ResponseEntity<Transaction> deleteTransaction(@RequestParam(value = "session_id",required =false) String session_id,
+                                  @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                   @PathVariable Integer transactionId) {
-        if (sessionId.equals("")) {
-            if (sessionHeader.equals("")) {
+        if (session_id.equals("")) {
+            if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            sessionId = sessionHeader;
+            session_id = X_session_ID;
         }
-        transactionService.deleteTransaction(sessionId, transactionId);
+        transactionService.deleteTransaction(session_id, transactionId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @PatchMapping(value = "/transactions/{transactionId}")
-    public ResponseEntity<Transaction> assignCategory(@RequestParam(defaultValue = "") String sessionId,
-                                                      @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+    @PatchMapping(value = "/transactions/{transactionId}/category")
+    public ResponseEntity<Transaction> assignCategory(@RequestParam(value = "session_id",required =false) String session_id,
+                                                      @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                                       @PathVariable Integer transactionId,
                                                       @RequestBody Category category) {
-        if (sessionId.equals("")) {
-            if (sessionHeader.equals("")) {
+        if (session_id.equals("")) {
+            if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            sessionId = sessionHeader;
+            session_id = X_session_ID;
         }
-        Transaction transaction = SessionController.sessions.get(sessionId).getTransactions().get(transactionId);
+        Transaction transaction = SessionController.sessions.get(session_id).getTransactions().get(transactionId);
+
+
         System.out.println("[Category] " + category.getId());
-        System.out.println("[Session] " + sessionId);
-        if (SessionController.sessions.get(sessionId).getCategories().containsKey(category.getId())) {
+        System.out.println("[Session] " + session_id);
+        if (SessionController.sessions.get(session_id).getCategories().containsKey(category.getId())) {
             transaction.setCategory(category);
             return new ResponseEntity<>(transaction, HttpStatus.OK);
         }
@@ -99,18 +101,18 @@ public class TransactionController {
     }
 
     @PutMapping("/transactions/{transactionId}")
-    public ResponseEntity<Transaction> updateTransaction(@RequestParam(defaultValue = "") String sessionId,
-                                         @RequestHeader(value = "sessionId",defaultValue = "") String sessionHeader,
+    public ResponseEntity<Transaction> updateTransaction(@RequestParam(value = "session_id",required =false) String session_id,
+                                         @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                          @PathVariable Integer transactionId,
                                          @RequestBody Transaction transaction) {
-        if (sessionId.equals("")) {
-            if (sessionHeader.equals("")) {
+        if (session_id.equals("")) {
+            if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            sessionId = sessionHeader;
+            session_id = X_session_ID;
         }
         transaction = transactionService.updateTransaction(
-               sessionId,
+                session_id,
                transaction,
                transactionId
        );
