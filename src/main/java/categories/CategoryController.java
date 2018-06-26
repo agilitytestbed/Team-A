@@ -19,11 +19,14 @@ public class CategoryController {
     public ResponseEntity<Category> postCategory(@RequestParam(value = "session_id",required =false) String session_id,
                                  @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                  @RequestBody Category category) {
-        if (session_id.equals("")) {
+        if (null == session_id || session_id.equals("")) {
             if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             session_id = X_session_ID;
+        }
+        if(null == category.getName()){
+            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
         }
         category = categoryService.postCategory(session_id, category);
         return new ResponseEntity<Category>(category, HttpStatus.CREATED);
@@ -32,7 +35,7 @@ public class CategoryController {
     @GetMapping("/categories")
     public ResponseEntity<Map> getCategories(@RequestParam(value = "session_id",required =false) String session_id,
                              @RequestHeader(value = "X-session-ID",required =false) String X_session_ID) {
-        if (session_id.equals("")) {
+        if (null == session_id || session_id.equals("")) {
             if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -46,7 +49,7 @@ public class CategoryController {
     public ResponseEntity<Category> getCategory(@RequestParam(value = "session_id",required =false) String session_id,
                                                 @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                                 @PathVariable Integer categoryId) {
-        if (session_id.equals("")) {
+        if (null == session_id || session_id.equals("")) {
             if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -64,7 +67,7 @@ public class CategoryController {
                                    @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                    @PathVariable Integer categoryId,
                                    @RequestBody Category category) {
-        if (session_id.equals("")) {
+        if (null == session_id  || session_id.equals("")) {
             if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -78,13 +81,16 @@ public class CategoryController {
     public ResponseEntity<Category> deleteCategory(@RequestParam(value = "session_id",required =false) String session_id,
                                @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                @PathVariable Integer categoryId) {
-        if (session_id.equals("")) {
+        if (null == session_id || session_id.equals("")) {
             if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             session_id = X_session_ID;
         }
-        categoryService.deleteCategory(session_id,categoryId);
+        boolean succes = categoryService.deleteCategory(session_id,categoryId);
+        if (!succes){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

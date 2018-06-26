@@ -37,7 +37,7 @@ public class TransactionController {
                                @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                @RequestParam(defaultValue = "0") Integer offset,
                                @RequestParam(defaultValue = "20") Integer limit) {
-        if (session_id.equals("")) {
+        if (null == session_id || session_id.equals("")) {
             if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -51,7 +51,7 @@ public class TransactionController {
     public ResponseEntity<Transaction> getTransaction(@RequestParam(value = "session_id",required =false) String session_id,
                                                       @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                                       @PathVariable Integer transactionId) {
-        if (session_id.equals("")) {
+        if (null == session_id || session_id.equals("")) {
             if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -68,7 +68,7 @@ public class TransactionController {
     public ResponseEntity<Transaction> deleteTransaction(@RequestParam(value = "session_id",required =false) String session_id,
                                   @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                   @PathVariable Integer transactionId) {
-        if (session_id.equals("")) {
+        if (null == session_id || session_id.equals("")) {
             if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -82,7 +82,7 @@ public class TransactionController {
                                                       @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                                       @PathVariable Integer transactionId,
                                                       @RequestBody Category category) {
-        if (session_id.equals("")) {
+        if (null == session_id || session_id.equals("")) {
             if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -105,7 +105,7 @@ public class TransactionController {
                                          @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                          @PathVariable Integer transactionId,
                                          @RequestBody Transaction transaction) {
-        if (session_id.equals("")) {
+        if (null == session_id || session_id.equals("")) {
             if (X_session_ID.equals("")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }

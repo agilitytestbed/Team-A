@@ -45,14 +45,17 @@ public class CategoryService {
         return SessionController.sessions.get(sessionId).getCategories();
     }
 
-    public void deleteCategory( String sessionId, Integer categoryId) {
+    public boolean deleteCategory( String sessionId, Integer categoryId) {
+        boolean succes = false;
         SessionController.sessions.get(sessionId).getCategories().remove(categoryId);
         for (Transaction transaction : SessionController.sessions.get(sessionId).getTransactions().values()) {
             if (transaction.getCategory() != null) {
                 if (transaction.getCategory().getId() == categoryId) {
                     transaction.setCategory(null);
+                    succes = true;
                 }
             }
         }
+        return succes;
     }
 }

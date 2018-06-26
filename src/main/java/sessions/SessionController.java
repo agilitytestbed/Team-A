@@ -23,7 +23,7 @@ public class SessionController {
         Session newSession = new Session(sessionId);
         sessions.put(sessionId, newSession);
         Map response = new HashMap();
-        response.put("sessionID",sessionId);
+        response.put("id",sessionId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
