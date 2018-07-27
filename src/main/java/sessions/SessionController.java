@@ -24,6 +24,10 @@ public class SessionController {
         sessions.put(sessionId, newSession);
         Map response = new HashMap();
         response.put("id",sessionId);
+
+        if(null == newSession){
+            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+        }
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

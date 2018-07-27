@@ -40,7 +40,16 @@ public class TransactionService {
         return keys.stream().collect(Collectors.toMap(Function.identity(), transactionMap::get));
     }
 
-    public void deleteTransaction(String sessionId ,Integer transactionId) {
+    public boolean deleteTransaction(String sessionId ,Integer transactionId) {
+        boolean success = false;
         SessionController.sessions.get(sessionId).getTransactions().remove(transactionId);
+        for (Transaction transaction : SessionController.sessions.get(sessionId).getTransactions().values()) {
+            if (transaction != null) {
+                if (transaction.getId() == transactionId) {
+                    success = true;
+                }
+            }
+        }
+        return success;
     }
 }

@@ -75,4 +75,20 @@ public class Transaction {
 
         this.category = category;
     }
+
+    public boolean validTransaction() {
+
+        // checks if  a value in the transaction is null
+        if (externalIBAN == null || transactionDate == null || type == null) {
+            return false;
+        }
+
+        //checks if amount is negative or zero
+        if (amount < 1) {
+            return false;
+        }
+
+
+        return true;
+    }
 }
