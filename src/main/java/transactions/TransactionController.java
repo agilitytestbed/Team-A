@@ -22,15 +22,12 @@ public class TransactionController {
     public ResponseEntity<Transaction> postTransaction(@RequestParam(value = "session_id", required = false) String session_id,
                                                        @RequestHeader(value = "X-session-ID", required = false) String X_session_ID,
                                                        @RequestBody Transaction transaction) {
-        if (session_id.equals("")) {
-            if (X_session_ID.equals("")) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            session_id = X_session_ID;
+        if (!SessionController.validSession(session_id,X_session_ID)){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         if (null == transaction || !transaction.validTransaction()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
         }
 
         transaction = transactionService.postTransaction(session_id, transaction);
@@ -42,11 +39,8 @@ public class TransactionController {
                                                @RequestHeader(value = "X-session-ID", required = false) String X_session_ID,
                                                @RequestParam(defaultValue = "0") Integer offset,
                                                @RequestParam(defaultValue = "20") Integer limit) {
-        if (null == session_id || session_id.equals("")) {
-            if (X_session_ID.equals("")) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            session_id = X_session_ID;
+        if (!SessionController.validSession(session_id,X_session_ID)){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Map transactions = transactionService.getTransactions(session_id, offset, limit);
@@ -57,15 +51,13 @@ public class TransactionController {
     public ResponseEntity<Transaction> getTransaction(@RequestParam(value = "session_id", required = false) String session_id,
                                                       @RequestHeader(value = "X-session-ID", required = false) String X_session_ID,
                                                       @PathVariable Integer transactionId) {
-        if (null == session_id || session_id.equals("")) {
-            if (X_session_ID.equals("")) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            session_id = X_session_ID;
+        if (!SessionController.validSession(session_id,X_session_ID)){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+
         Transaction transaction = transactionService.getTransaction(session_id, transactionId);
-        if (transaction == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if ( null == transaction ) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
@@ -74,11 +66,8 @@ public class TransactionController {
     public ResponseEntity<Transaction> deleteTransaction(@RequestParam(value = "session_id", required = false) String session_id,
                                                          @RequestHeader(value = "X-session-ID", required = false) String X_session_ID,
                                                          @PathVariable Integer transactionId) {
-        if (null == session_id || session_id.equals("")) {
-            if (X_session_ID.equals("")) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            session_id = X_session_ID;
+        if (!SessionController.validSession(session_id,X_session_ID)){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         boolean success = transactionService.deleteTransaction(session_id, transactionId);
@@ -86,7 +75,7 @@ public class TransactionController {
         if (!success) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -95,13 +84,14 @@ public class TransactionController {
                                                       @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                                       @PathVariable Integer transactionId,
                                                       @RequestBody Category category) {
-        if (null == session_id || session_id.equals("")) {
-            if (X_session_ID.equals("")) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            session_id = X_session_ID;
+
+        if (!SessionController.validSession(session_id,X_session_ID)){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        Transaction transaction = SessionController.sessions.get(session_id).getTransactions().get(transactionId);
+
+        Session session = SessionController.getSession(session_id,X_session_ID);
+
+        Transaction transaction = session.getTransactions().get(transactionId);
 
 
         System.out.println("[Category] " + category.getId());
@@ -110,7 +100,7 @@ public class TransactionController {
             transaction.setCategory(category);
             return new ResponseEntity<>(transaction, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/transactions/{transactionId}")
@@ -118,14 +108,13 @@ public class TransactionController {
                                          @RequestHeader(value = "X-session-ID",required =false) String X_session_ID,
                                          @PathVariable Integer transactionId,
                                          @RequestBody Transaction transaction) {
-        if (null == session_id || session_id.equals("")) {
-            if (X_session_ID.equals("")) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            session_id = X_session_ID;
+        if (!SessionController.validSession(session_id,X_session_ID)){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+
+
         if(transaction == null || !transaction.validTransaction()){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
 

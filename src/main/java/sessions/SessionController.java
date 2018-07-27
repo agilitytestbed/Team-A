@@ -31,6 +31,32 @@ public class SessionController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+
+    public static boolean  validSession(String sessionId, String headerSessionId){
+
+
+        if (null == sessionId || sessionId.equals("")) {
+            if ( null == headerSessionId || headerSessionId.equals("")) {
+                return false;
+            }
+            sessionId = headerSessionId;
+        }
+
+        if ( null == sessions.get(sessionId)){
+            return false;
+
+        }
+       return true;
+    }
+
+    public static Session getSession(String sessionId, String headerSessionId){
+
+        if (null == sessionId || sessionId.equals("")) {
+            sessionId = headerSessionId;
+        }
+        return sessions.get(sessionId);
+    }
+
     @RequestMapping("/debug")
     public Object debugInfo(){
         return sessions;
