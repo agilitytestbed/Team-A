@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sessions.Session;
 import sessions.SessionController;
 import categories.*;
 import java.util.Map;
@@ -26,7 +27,10 @@ public class CategoryController {
         if(null == category.getName()){
             return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
         }
-        category = categoryService.postCategory(session_id, category);
+
+        Session session = SessionController.getSession(session_id,X_session_ID);
+
+        category = categoryService.postCategory(session.getSessionId(), category);
         return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
 
@@ -37,7 +41,9 @@ public class CategoryController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        Map response =  categoryService.getCategories(session_id);
+        Session session = SessionController.getSession(session_id,X_session_ID);
+
+        Map response =  categoryService.getCategories(session.getSessionId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -49,7 +55,9 @@ public class CategoryController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        Category category = categoryService.getCategory(session_id,categoryId);
+        Session session = SessionController.getSession(session_id,X_session_ID);
+
+        Category category = categoryService.getCategory(session.getSessionId(),categoryId);
         if (category == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -69,7 +77,9 @@ public class CategoryController {
             return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
         }
 
-        category = categoryService.updateCategory(session_id,categoryId,category);
+        Session session = SessionController.getSession(session_id,X_session_ID);
+
+        category = categoryService.updateCategory(session.getSessionId(),categoryId,category);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
@@ -81,7 +91,8 @@ public class CategoryController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        boolean success = categoryService.deleteCategory(session_id,categoryId);
+        Session session = SessionController.getSession(session_id,X_session_ID);
+        boolean success = categoryService.deleteCategory(session.getSessionId(),categoryId);
         if (!success){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

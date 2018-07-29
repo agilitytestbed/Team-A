@@ -30,7 +30,9 @@ public class TransactionController {
             return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
         }
 
-        transaction = transactionService.postTransaction(session_id, transaction);
+        Session session = SessionController.getSession(session_id,X_session_ID);
+
+        transaction = transactionService.postTransaction(session.getSessionId(), transaction);
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
 
@@ -43,7 +45,9 @@ public class TransactionController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        Map transactions = transactionService.getTransactions(session_id, offset, limit);
+        Session session = SessionController.getSession(session_id,X_session_ID);
+
+        Map transactions = transactionService.getTransactions(session.getSessionId(), offset, limit);
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
@@ -55,7 +59,10 @@ public class TransactionController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        Transaction transaction = transactionService.getTransaction(session_id, transactionId);
+
+        Session session = SessionController.getSession(session_id,X_session_ID);
+        Transaction transaction = session.getTransactions().get(transactionId);
+
         if ( null == transaction ) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -70,7 +77,9 @@ public class TransactionController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        boolean success = transactionService.deleteTransaction(session_id, transactionId);
+        Session session = SessionController.getSession(session_id,X_session_ID);
+
+        boolean success = transactionService.deleteTransaction(session.getSessionId(), transactionId);
 
         if (!success) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -112,6 +121,7 @@ public class TransactionController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
+        Session session = SessionController.getSession(session_id,X_session_ID);
 
         if(transaction == null || !transaction.validTransaction()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -119,10 +129,10 @@ public class TransactionController {
 
 
         transaction = transactionService.updateTransaction(
-                session_id,
-               transaction,
-               transactionId
-       );
+                session.getSessionId(),
+                transaction,
+                transactionId
+        );
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 }
