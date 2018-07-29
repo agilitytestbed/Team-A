@@ -2,7 +2,6 @@ package transactions;
 
 import categories.Category;
 import java.util.Date;
-
 public class Transaction {
     private int transactionId;
 
