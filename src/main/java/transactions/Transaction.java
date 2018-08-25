@@ -36,7 +36,7 @@ public class Transaction {
     }
 
 
-    private String getExternalIBAN(){
+    public String getExternalIBAN(){
         return externalIBAN;
     }
 
@@ -45,7 +45,7 @@ public class Transaction {
         this.externalIBAN = externalIBAN;
     }
 
-    private TransactionType getType(){
+    public TransactionType getType(){
         return type;
     }
 

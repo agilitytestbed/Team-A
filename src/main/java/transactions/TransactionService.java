@@ -25,7 +25,8 @@ public class TransactionService {
 
         transaction.setId(transactionId);
         SessionController.sessions.get(sessionId).getTransactions().put(transactionId, transaction);
-        return transaction;    }
+        return transaction;
+    }
 
     public Transaction getTransaction(String sessionId, Integer transactionId) {
         return SessionController.sessions.get(sessionId).getTransactions().get(transactionId);

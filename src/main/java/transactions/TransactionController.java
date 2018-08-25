@@ -123,6 +123,8 @@ public class TransactionController {
 
         Session session = SessionController.getSession(session_id,X_session_ID);
 
+
+
         if(transaction == null || !transaction.validTransaction()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
